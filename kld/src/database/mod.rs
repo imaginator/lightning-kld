@@ -6,6 +6,7 @@ pub mod payment;
 pub mod peer;
 pub mod spendable_output;
 mod wallet_database;
+use tokio_postgres::NoTls;
 
 use std::{
     sync::{Arc, RwLock},
@@ -138,23 +139,23 @@ impl DurableConnection {
 
     async fn create_connection(settings: Arc<Settings>) -> Result<(Client, JoinHandle<()>)> {
         let log_safe_params = format!(
-            "host={} port={} user={} dbname={}",
+            "host={} port={} user={} dbname={} password=mysecretpassword",
             settings.database_host,
             settings.database_port,
             settings.database_user,
             settings.database_name
         );
-        let mut builder = SslConnector::builder(SslMethod::tls()).expect("TLS initialisation");
-        builder.set_ca_file(&settings.database_ca_cert_path)?;
-        builder
-            .set_certificate_file(&settings.database_client_cert_path, SslFiletype::PEM)
-            .expect("Database certificate");
-        builder
-            .set_private_key_file(&settings.database_client_key_path, SslFiletype::PEM)
-            .expect("Database private key");
-        let connector = MakeTlsConnector::new(builder.build());
-        let (client, connection) = tokio_postgres::connect(&log_safe_params, connector)
-            .await
+        // let mut builder = SslConnector::builder(SslMethod::tls()).expect("TLS initialisation");
+        // builder.set_ca_file(&settings.database_ca_cert_path)?;
+        // builder
+        //     .set_certificate_file(&settings.database_client_cert_path, SslFiletype::PEM)
+        //     .expect("Database certificate");
+        // builder
+        //     .set_private_key_file(&settings.database_client_key_path, SslFiletype::PEM)
+        //     .expect("Database private key");
+        // let connector = MakeTlsConnector::new(builder.build());
+        let (client, connection) = tokio_postgres::connect(&log_safe_params, NoTls)
+        .await
             .with_context(|| format!("Cannot connect to database ({log_safe_params})"))?;
         let connection_task = tokio::spawn(async move {
             if let Err(e) = connection.await {

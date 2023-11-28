@@ -7,26 +7,26 @@ use clap::{builder::OsStr, Parser};
 #[derive(Parser, Debug, Clone)]
 #[command(author, version, about, long_about = None)]
 pub struct Settings {
-    #[arg(long, default_value = "localhost", env = "KLD_BITCOIN_RPC_HOST")]
+    #[arg(long, default_value = "10.7.11.52", env = "KLD_BITCOIN_RPC_HOST")]
     pub bitcoind_rpc_host: String,
-    #[arg(long, default_value = "8333", env = "KLD_BITCOIN_RPC_PORT")]
+    #[arg(long, default_value = "8332", env = "KLD_BITCOIN_RPC_PORT")]
     pub bitcoind_rpc_port: u16,
-    #[arg(long, default_value = "regtest", env = "KLD_BITCOIN_NETWORK")]
+    #[arg(long, default_value = "main", env = "KLD_BITCOIN_NETWORK")]
     pub bitcoin_network: Network,
     #[arg(
         long,
-        default_value = "/var/lib/bitcoind-testnet/.cookie",
+        default_value = "/tmp/bitcoind-testnet/.cookie",
         env = "KLD_BITCOIN_COOKIE_PATH"
     )]
     pub bitcoin_cookie_path: String,
 
-    #[arg(long, default_value = "/var/lib/kld", env = "KLD_DATA_DIR")]
+    #[arg(long, default_value = "/tmp/kld", env = "KLD_DATA_DIR")]
     pub data_dir: String,
     #[arg(long, default_value = "/var/lib/kld/certs", env = "KLD_CERTS_DIR")]
     pub certs_dir: String,
     #[arg(
         long,
-        default_value = "/var/lib/kld/mnemonic",
+        default_value = "/tmp/mnemonic",
         env = "KLD_MNEMONIC_PATH"
     )]
     pub mnemonic_path: String,
@@ -61,18 +61,19 @@ pub struct Settings {
 
     #[arg(long, default_value = "127.0.0.1", env = "KLD_DATABASE_HOST")]
     pub database_host: String,
-    #[arg(long, default_value = "10000", env = "KLD_DATABASE_PORT")]
+    #[arg(long, default_value = "5432", env = "KLD_DATABASE_PORT")]
     pub database_port: u16,
-    #[arg(long, default_value = "root", env = "KLD_DATABASE_USER")]
+    #[arg(long, default_value = "postgres", env = "KLD_DATABASE_USER")]
     pub database_user: String,
-    #[arg(long, default_value = "defaultdb", env = "KLD_DATABASE_NAME")]
+    #[arg(long, default_value = "postgres", env = "KLD_DATABASE_NAME")]
     pub database_name: String,
-    #[arg(long, default_value = "", env = "KLD_DATABASE_CA_CERT_PATH")]
-    pub database_ca_cert_path: String,
-    #[arg(long, default_value = "", env = "KLD_DATABASE_CLIENT_CERT_PATH")]
-    pub database_client_cert_path: String,
-    #[arg(long, default_value = "", env = "KLD_DATABASE_CLIENT_KEY_PATH")]
-    pub database_client_key_path: String,
+
+    // #[arg(long, default_value = "", env = "KLD_DATABASE_CA_CERT_PATH")]
+    // pub database_ca_cert_path: String,
+    // #[arg(long, default_value = "", env = "KLD_DATABASE_CLIENT_CERT_PATH")]
+    // pub database_client_cert_path: String,
+    // #[arg(long, default_value = "", env = "KLD_DATABASE_CLIENT_KEY_PATH")]
+    // pub database_client_key_path: String,
 }
 
 impl Settings {
